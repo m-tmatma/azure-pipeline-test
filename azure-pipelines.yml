@@ -1,10 +1,51 @@
 jobs:
-- job: Linux
-
-  pool: test
-
+- job: Linux_Debug
+  pool:
+    vmImage: 'Ubuntu 16.04'
   steps:
   - script: |
       ./build.sh
     displayName: './build.sh'
+
+  - script: TESTBAR=1234
+  - script: echo ${TESTBAR}
+  - script: |
+      TEST2=2345
+      echo ${TEST2}
+  - script: echo $(Build.ArtifactStagingDirectory)
+  - script: set
+  - task: CopyFiles@1
+    inputs:
+      contents: |
+        test
+      targetFolder: $(Build.ArtifactStagingDirectory)
+  - task: PublishBuildArtifacts@1
+    inputs:
+       pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+       artifactName: test
+
+- job: Linux_Release
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+  - script: |
+      ./build.sh
+    displayName: './build.sh'
+
+  - script: TESTBAR=1234
+  - script: echo ${TESTBAR}
+  - script: |
+      TEST2=2345
+      echo ${TEST2}
+  - script: echo $(Build.ArtifactStagingDirectory)
+  - script: set
+  - task: CopyFiles@1
+    inputs:
+      contents: |
+        test
+      targetFolder: $(Build.ArtifactStagingDirectory)
+  - task: PublishBuildArtifacts@1
+    inputs:
+       pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+       artifactName: test
 
