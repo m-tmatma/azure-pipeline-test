@@ -1,7 +1,6 @@
 jobs:
 - job: Linux_Debug
-  pool:
-    vmImage: 'Ubuntu 16.04'
+  pool: 'Hosted Ubuntu 1604'
   steps:
   - script: |
       ./build.sh
@@ -25,8 +24,7 @@ jobs:
        artifactName: test
 
 - job: Linux_Release
-  pool:
-    vmImage: 'Ubuntu 16.04'
+  pool: 'Hosted Ubuntu 1604'
   steps:
   - script: |
       ./build.sh
