@@ -1,6 +1,14 @@
 jobs:
-- job: Linux_Debug
-  pool: 'Hosted Ubuntu 1604'
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-16.04'
+  strategy:
+    maxParallel: 2
+    matrix:
+      debugJob:
+        configuration: debug
+      releaseJob:
+        configuration: release
   steps:
   - script: |
       ./build.sh
@@ -22,28 +30,3 @@ jobs:
     inputs:
        pathtoPublish: '$(Build.ArtifactStagingDirectory)'
        artifactName: test
-
-- job: Linux_Release
-  pool: 'Hosted Ubuntu 1604'
-  steps:
-  - script: |
-      ./build.sh
-    displayName: './build.sh'
-
-  - script: TESTBAR=1234
-  - script: echo ${TESTBAR}
-  - script: |
-      TEST2=2345
-      echo ${TEST2}
-  - script: echo $(Build.ArtifactStagingDirectory)
-  - script: set
-  - task: CopyFiles@1
-    inputs:
-      contents: |
-        test
-      targetFolder: $(Build.ArtifactStagingDirectory)
-  - task: PublishBuildArtifacts@1
-    inputs:
-       pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-       artifactName: test
-
